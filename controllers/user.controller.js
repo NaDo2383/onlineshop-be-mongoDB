@@ -4,6 +4,7 @@ const { parse } = require("path");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const myPlaintextPassword = "s0//P4$$w0rD";
+const User = require("../models/user.model");
 
 const dataFile = process.cwd() + "/data/user.json";
 
@@ -19,52 +20,14 @@ exports.getAll = (req, res) => {
   });
 };
 
-exports.create = (req, res) => {
-  const {
-    userName,
-    firstName,
-    lastName,
-    age,
-    address,
-    isAdmin,
-    password,
-    email,
-  } = req.body;
-  fs.readFile(dataFile, "utf-8", async (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
+exports.create = async (req, res) => {
+  const obj = req.body;
 
-    const parsedData = data ? JSON.parse(data) : [];
+  const a = await User.create(obj);
 
-    const newPassword = await bcrypt.hash(password, saltRounds);
+  console.log(a);
 
-    console.log(newPassword);
-
-    const newObj = {
-      id: Date.now().toString() + "user",
-      userName,
-      firstName,
-      lastName,
-      age,
-      address,
-      isAdmin,
-      email,
-      favoriteProducs: [],
-      mostViewProducts: [],
-      password: newPassword,
-    };
-
-    parsedData.push(newObj);
-
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: parsedData });
-    });
-  });
+  res.json({ message: "Success", result: a });
 };
 
 exports.update = (req, res) => {

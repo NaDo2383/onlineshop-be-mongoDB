@@ -1,147 +1,15 @@
-const { response } = require("express");
-const fs = require("fs");
-const { parse } = require("path");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-const myPlaintextPassword = "s0//P4$$w0rD";
-const User = require("../models/user.model");
-
-const dataFile = process.cwd() + "/data/user.json";
-
-exports.getAll = (req, res) => {
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const savedData = data ? JSON.parse(data) : [];
-
-    return res.json({ status: true, result: savedData });
-  });
-};
+const User = require("../controllers/user.controller");
 
 exports.create = async (req, res) => {
-  const obj = req.body;
-
-  const a = await User.create(obj);
-
-  console.log(a);
-
-  res.json({ message: "Success", result: a });
+    console.log(req.body);
+    const obj = req.body;
+    const a = await User.create(obj);
+    console.log(a);
+    res.json({ message: "Success", result: a });
 };
 
-exports.update = (req, res) => {
-  const {
-    userName,
-    firstName,
-    lastName,
-    age,
-    address,
-    isAdmin,
-    email,
-    favoriteProducs,
-    mostViewProducts,
-  } = req.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const updatedData = parsedData.map((e) => {
-      if (e.id == id) {
-        return {
-          ...e,
-          userName,
-          firstName,
-          lastName,
-          age,
-          address,
-          isAdmin,
-          email,
-          favoriteProducs,
-          mostViewProducts,
-        };
-      } else {
-        return e;
-      }
-    });
-
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: updatedData });
-    });
-  });
-};
-
-exports.delete = (req, res) => {
-  const { id } = req.params;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-    const updatedData = parsedData.filter((e) => e.id != id);
-
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: updatedData });
-    });
-  });
-};
-
-exports.login = (request, response) => {
-  const { email, password } = request.body;
-
-  if (!email || !password)
-    return response.json({
-      status: false,
-      message: "medeellee buren buglunu uu",
-    });
-
-  fs.readFile(dataFile, "utf-8", async (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-    let user;
-    for (let i = 0; i < parsedData.length; i++) {
-      if (email == parsedData[i].email) {
-        const decrypt = await bcrypt.compare(password, parsedData[i].password);
-
-        if (decrypt) {
-          user = {
-            id: parsedData[i].id,
-            email: parsedData[i].email,
-            lastName: parsedData[i].lastName,
-            firstName: parsedData[i].firstName,
-          };
-          break;
-        }
-      }
-    }
-
-    console.log(user);
-
-    if (user) {
-      return response.json({
-        status: true,
-        result: user,
-      });
-    } else {
-      return response.json({
-        status: false,
-        message: "Tanii email eswel nuuts ug buruu bna",
-      });
-    }
-  });
+exports.getAll = async (req, res) => {
+    const a = await User.find();
+    console.log(a);
+    res.json({ message: "Test", result: a });
 };

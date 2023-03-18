@@ -1,6 +1,4 @@
 const port = 8000;
-const bodyParser = require("body-parser");
-
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -20,14 +18,14 @@ app.use("/api", userRouter);
 app.use("/api", productRouter);
 
 mongoose
-  .connect(
-    "mongodb+srv://Nado:4dvI9Dy6yh6nCVkY@cluster0.p2yt6wz.mongodb.net/onlineshop-be"
-  )
-  .then(() => console.log("Database successfully connected"))
-  .catch((err) => console.log(err));
+    .connect(
+        "mongodb+srv://Nado:4dvI9Dy6yh6nCVkY@cluster0.p2yt6wz.mongodb.net/onlineshop-be"
+    )
+    .then(() => console.log("Database successfully connected"))
+    .catch((err) => console.log(err));
 
 app.get("/api", (req, res) => {
-  res.json({ message: "welcome Rest API" });
+    res.json({ message: "welcome Rest API" });
 });
 
 app.listen(port, () => console.log("server is running " + port));

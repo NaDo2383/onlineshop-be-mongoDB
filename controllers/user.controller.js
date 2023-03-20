@@ -1,9 +1,10 @@
-const User = require("../controllers/user.controller");
+const User = require("../models/user.model");
 
 exports.create = async (req, res) => {
     console.log(req.body);
     const obj = req.body;
-    const a = await User.create(obj);
+    const newUser = new User(obj);
+    const a = await newUser.save();
     console.log(a);
     res.json({ message: "Success", result: a });
 };

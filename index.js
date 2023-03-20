@@ -19,7 +19,7 @@ app.use("/api", productRouter);
 
 mongoose
     .connect(
-        "mongodb+srv://Nado:4dvI9Dy6yh6nCVkY@cluster0.p2yt6wz.mongodb.net/onlineshop-be"
+        "mongodb+srv://Nado:rjkLBCPbGvRwlkaI@cluster0.p2yt6wz.mongodb.net/onlineshop-be"
     )
     .then(() => console.log("Database successfully connected"))
     .catch((err) => console.log(err));

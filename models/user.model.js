@@ -12,12 +12,8 @@ const userSchema = new mongoose.Schema(
     favoriteProducs: [String],
     mostViewProducts: [String],
     password: { String },
-    createdOn: {
-      type: Date,
-      default: Date.now,
-    },
   },
-  { collection: "user" }
+  { collection: "user", timestamps: true }
 );
 
 const User = mongoose.model("user", userSchema);

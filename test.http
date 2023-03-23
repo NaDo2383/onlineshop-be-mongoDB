@@ -3,12 +3,13 @@ post  http://localhost:8000/api/user
 Content-Type: application/json
 
 {
-    "userName":"test",
+    "userName":"test1",
     "firstName":"test",
     "lastName":"test",
     "age":123,
     "address":"test",
     "isAdmin":"test",
     "password":"test",
-    "email":"test@gmail.com"
+    "email":"test1@gmail.com"
+    
 }

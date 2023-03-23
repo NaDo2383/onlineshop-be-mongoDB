@@ -23,9 +23,7 @@ exports.create = async (req, res) => {
     !firstName ||
     !lastName ||
     !age ||
-    !address ||
-    !favoriteProducts ||
-    !mostViewProducts
+    !address
   ) {
     res
       .status(500)

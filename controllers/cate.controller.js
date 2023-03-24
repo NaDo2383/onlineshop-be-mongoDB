@@ -1,87 +1,51 @@
-const { response } = require("express");
-const fs = require("fs");
-const { parse } = require("path");
+const Category = require("../models/category.model");
 
-const dataFile = process.cwd() + "/data/category.json";
-
-exports.getAll = (req, res) => {
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const savedData = data ? JSON.parse(data) : [];
-
-    return res.json({ status: true, result: savedData });
-  });
+exports.getAll = async (req, res) => {
+  try {
+    const result = await Category.find({});
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };
 
-exports.create = (req, res) => {
-  const { cateName } = req.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const newObj = { id: Date.now().toString() + "category", cateName };
-
-    parsedData.push(newObj);
-
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: parsedData });
-    });
-  });
+exports.getOne = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.findById({ _id });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };
 
-exports.update = (req, res) => {
-  const { id, cateName } = req.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const updatedData = parsedData.map((e) => {
-      if (e.id == id) {
-        return { ...e, cateName };
-      } else {
-        return e;
-      }
-    });
-
-    fs.writeFile(dataFile, "utf-8", JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: updatedData });
-    });
-  });
+exports.createCategory = async (req, res) => {
+  try {
+    const result = await Category.create(req.body);
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };
 
-exports.delete = (req, res) => {
-  const { id } = req.params;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return res.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-    const updatedData = parsedData.filter((e) => e.id != id);
-
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return res.json({ status: false, message: writeErr });
-      }
-
-      return res.json({ status: true, result: updatedData });
+exports.updateCategory = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.findByIdAndUpdate({ _id }, req.body, {
+      new: true,
     });
-  });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
+};
+
+exports.deleteCategory = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.deleteOne({ _id });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };

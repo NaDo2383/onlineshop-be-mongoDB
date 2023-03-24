@@ -93,7 +93,75 @@ exports.login = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  const a = await User.find();
-  console.log(a);
-  res.json({ message: "Test", result: a });
+  const { user } = req;
+
+  if (!user) {
+    res.status(500).send({
+      status: false,
+      message: "Token-tei hereglegch bish bna",
+    });
+    return;
+  }
+
+  const result = await User.find({});
+
+  if (result) {
+    res.status(200).send({
+      status: true,
+      result,
+    });
+    return;
+  } else {
+    res.status(500).send({
+      status: false,
+      message: "Baazad hereglegch bhgui bna",
+    });
+    return;
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { _id } = req.params;
+  const { user } = req;
+
+  if (!user) {
+    res.status(500).send({
+      status: false,
+      message: "Token-tei hereglegch bish bna",
+    });
+    return;
+  }
+
+  try {
+    const result = await User.deleteOne({ _id });
+    res.status(200).send({ status: true, message: "amjilttai ustlaa", result });
+    return;
+  } catch (err) {
+    res.status(400).send({ status: false, message: err });
+    return;
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { _id } = req.params;
+  const { user } = req;
+
+  if (!user) {
+    res.status(500).send({
+      status: false,
+      message: "Token-tei hereglegch bish bna",
+    });
+    return;
+  }
+
+  try {
+    const result = await User.findByIdAndUpdate({ _id }, req.body, {
+      new: true,
+    });
+    res.json({ status: true, result });
+    return;
+  } catch (err) {
+    res.json({ status: false, message: err });
+    return;
+  }
 };

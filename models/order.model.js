@@ -5,17 +5,15 @@ const orderSchema = new mongoose.Schema(
     orderTotalPrice: Number,
     orderDetail: [
       {
-        productId: String,
+        productId: { type: Schema.Types.ObjectId, ref: "Product" },
         orderedQuantity: number,
+        currentPrice: Number,
+        salePercent: Number,
       },
     ],
     userId: String,
     totalPrice: Number,
     status: String,
-    createdOn: {
-      type: Date,
-      default: Date.now,
-    },
   },
   { collection: "order", timestamps: true }
 );

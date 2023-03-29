@@ -7,14 +7,14 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const catRouter = require("./routes/category.route.js");
+const cateRouter = require("./routes/category.route");
 const userRouter = require("./routes/user.route.js");
 const productRouter = require("./routes/products.route.js");
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", catRouter);
+app.use("/api", cateRouter);
 app.use("/api", userRouter);
 app.use("/api", productRouter);
 

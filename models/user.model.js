@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, Schema } = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema(
     address: [String, String],
     isAdmin: { Boolean },
     email: { type: String, unique: true },
-    favoriteProducs: [String],
-    mostViewProducts: [String],
+    favoriteProducs: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    mostViewProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     password: { String },
   },
   { collection: "user", timestamps: true }

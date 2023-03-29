@@ -103,7 +103,9 @@ exports.getAll = async (req, res) => {
     return;
   }
 
-  const result = await User.find({});
+  const result = await User.find({})
+    .populate("favoriteProducs")
+    .populate("mostViewProducts");
 
   if (result) {
     res.status(200).send({

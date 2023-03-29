@@ -13,3 +13,7 @@ Content-Type: application/json
     "email":"test1@gmail.com"
     
 }
+
+
+### 
+GET  http://localhost:8000/api/user
